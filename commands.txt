@@ -1,0 +1,48 @@
+from news.models import *
+
+u1 = User.objects.create_user(username='Sergey')
+u2 = User.objects.create_user(username='Vera')
+
+Author.objects.create(authorUser=u1)
+Author.objects.create(authorUser=u2)
+
+Category.objects.create(name='development')
+Category.objects.create(name='administration')
+Category.objects.create(name='design')
+Category.objects.create(name='management')
+
+author = Author.objects.get(id=1)
+Post.objects.create(author=author, categoryType='NW', title='sometitle', text='sometext')
+Post.objects.create(author=author, categoryType='AR', title='sometitle', text='sometext')
+Post.objects.create(author=author, categoryType='AR', title='sometitle', text='sometext')
+
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1))
+Post.objects.get(id=2).postCategory.add(Category.objects.get(id=1))
+
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=1).authorUser, text='anytextbyauthor')
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=2).authorUser, text='anytextbyauthor')
+Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=Author.objects.get(id=1).authorUser, text='anytextbyauthor')
+Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=Author.objects.get(id=2).authorUser, text='anytextbyauthor')
+
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=1).dislike()
+Comment.objects.get(id=1).rating
+
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=2).dislike()
+Comment.objects.get(id=2).dislike()
+Comment.objects.get(id=2).rating
+
+a = Author.objects.get(id=1)
+a.update_rating()
+a.ratingAuthor
+
+a = Author.objects.order_by('-ratingAuthor')[:1]
+a
+
+for i in a:
+...     i.ratingAuthor
+...     i.authorUser.username
+... 
